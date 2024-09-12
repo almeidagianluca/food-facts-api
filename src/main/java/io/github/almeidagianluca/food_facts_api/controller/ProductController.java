@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ProductController {
     List<Product> getProducts();
+    Product getProductByCode(Integer code);
 }

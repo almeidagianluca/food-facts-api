@@ -15,8 +15,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
+import static io.github.almeidagianluca.food_facts_api.mocks.ProductMock.getProductMock;
 import static io.github.almeidagianluca.food_facts_api.mocks.ProductMock.getProductsListMock;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(ProductControllerImpl.class)
@@ -37,6 +37,20 @@ class ProductControllerImplTest {
         when(productService.getProducts()).thenReturn(mockProductsList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/products")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(expectedResponse));
+    }
+
+    @Test
+    void getProductByCode() throws Exception {
+        Product productMock = getProductMock();
+        Integer code = 123;
+        Gson gson = new Gson();
+        String expectedResponse = gson.toJson(productMock);
+        when(productService.getProductByCode(code)).thenReturn(productMock);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/products/123")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json(expectedResponse));

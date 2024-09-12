@@ -39,4 +39,22 @@ public class ProductMock {
                 .build();
         return List.of(product1, product2);
     }
+
+    public static Product getProductMock() {
+        return Product.builder()
+                .code(123)
+                .status("Available")
+                .importedT("2024-09-12")
+                .url("http://example.com/product")
+                .creator("John Doe")
+                .createdT(1631234567L)
+                .lastModifiedT(1634567890L)
+                .productName("Product Name")
+                .quantity("1 kg")
+                .brands("Brand A")
+                .categories("Category 1")
+                .labels("Label X")
+                .cities("City Y")
+                .build();
+    }
 }

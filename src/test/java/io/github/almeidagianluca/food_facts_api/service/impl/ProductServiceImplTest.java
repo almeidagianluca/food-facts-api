@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static io.github.almeidagianluca.food_facts_api.mocks.ProductMock.getProductMock;
 import static io.github.almeidagianluca.food_facts_api.mocks.ProductMock.getProductsListMock;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -33,5 +34,16 @@ class ProductServiceImplTest {
 
         assertEquals(2, result.size());
         assertEquals(mockProducstList, result);
+    }
+
+    @Test
+    void getProductByCode() {
+        Product mockProductList = getProductMock();
+        Integer code = 123;
+        when(productRepository.findByCode(code)).thenReturn(mockProductList);
+
+        Product result = productService.getProductByCode(code);
+
+        assertEquals(mockProductList, result);
     }
 }

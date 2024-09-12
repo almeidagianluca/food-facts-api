@@ -5,6 +5,7 @@ import io.github.almeidagianluca.food_facts_api.model.Product;
 import io.github.almeidagianluca.food_facts_api.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,5 +22,11 @@ public class ProductControllerImpl implements ProductController {
     @GetMapping
     public List<Product> getProducts() {
         return productService.getProducts();
+    }
+
+    @Override
+    @GetMapping("/{code}")
+    public Product getProductByCode(@PathVariable Integer code) {
+        return productService.getProductByCode(code);
     }
 }
