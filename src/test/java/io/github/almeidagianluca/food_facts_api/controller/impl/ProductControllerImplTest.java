@@ -77,4 +77,18 @@ class ProductControllerImplTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json(expectedResponse));;
     }
+
+    @Test
+    void deleteProduct() throws Exception {
+        Product productMock = getProductMock();
+        Integer code = 123;
+        Gson gson = new Gson();
+        String expectedResponse = gson.toJson(productMock);
+        when(productService.deleteProduct(code)).thenReturn(new ResponseEntity<>(productMock, HttpStatus.OK));
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/products/123")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(expectedResponse));
+    }
 }

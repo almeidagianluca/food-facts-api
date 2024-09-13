@@ -33,4 +33,10 @@ public class ProductControllerImpl implements ProductController {
     public ResponseEntity<Product> updateProduct(@PathVariable Integer code, @RequestBody Product product) {
         return productService.updateProduct(code, product);
     }
+
+    @Override
+    @DeleteMapping("/{code}")
+    public ResponseEntity<Product> deleteProduct(@PathVariable Integer code) {
+        return productService.deleteProduct(code);
+    }
 }

@@ -19,6 +19,8 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    private final String DELETE_STATUS = "trash";
+
     @Autowired
     private ProductRepository productRepository;
 
@@ -35,6 +37,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findByCode(code);
     }
 
+    @Override
     public ResponseEntity<Product> updateProduct(Integer code, Product updatedProduct) {
         Query query = new Query(Criteria.where("code").is(code));
 
@@ -59,5 +62,12 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return ResponseEntity.ok(updatedProduct);
+    }
+
+    @Override
+    public ResponseEntity<Product> deleteProduct(Integer code) {
+        Product product = getProductByCode(code);
+        product.setStatus(DELETE_STATUS);
+        return updateProduct(code, product);
     }
 }

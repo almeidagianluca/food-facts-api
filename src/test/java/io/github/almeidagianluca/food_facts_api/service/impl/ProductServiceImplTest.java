@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 
 import static io.github.almeidagianluca.food_facts_api.mocks.ProductMock.getProductMock;
 import static io.github.almeidagianluca.food_facts_api.mocks.ProductMock.getProductsListMock;
@@ -87,5 +88,21 @@ class ProductServiceImplTest {
                 .thenReturn(updateResult);
 
         assertThrows(ResponseStatusException.class, () -> productService.updateProduct(123, productMock));
+    }
+
+    @Test
+    public void deleteProduct() {
+        Product productMock = getProductMock();
+
+        UpdateResult updateResult = mock(UpdateResult.class);
+        when(productRepository.findByCode(123)).thenReturn(productMock);
+        when(updateResult.getMatchedCount()).thenReturn(1L);
+        when(mongoTemplate.updateFirst(any(Query.class), any(Update.class), eq(Product.class)))
+                .thenReturn(updateResult);
+
+        ResponseEntity<Product> response = productService.deleteProduct(123);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("trash", Objects.requireNonNull(response.getBody()).getStatus());
     }
 }

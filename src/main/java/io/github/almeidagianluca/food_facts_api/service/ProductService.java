@@ -9,4 +9,5 @@ public interface ProductService {
     List<Product> getProducts();
     Product getProductByCode(Integer code);
     ResponseEntity<Product> updateProduct(Integer code, Product updatedProduct);
+    ResponseEntity<Product> deleteProduct(Integer code);
 }
