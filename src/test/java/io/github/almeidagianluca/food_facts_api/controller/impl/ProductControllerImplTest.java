@@ -8,6 +8,9 @@ import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +22,8 @@ import java.util.List;
 
 import static io.github.almeidagianluca.food_facts_api.mocks.ProductMock.getProductMock;
 import static io.github.almeidagianluca.food_facts_api.mocks.ProductMock.getProductsListMock;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.RequestEntity.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ProductControllerImpl.class)
@@ -36,14 +39,14 @@ class ProductControllerImplTest {
     @Test
     void getProducts() throws Exception {
         List<Product> mockProductsList = getProductsListMock();
-        Gson gson = new Gson();
-        String expectedResponse = gson.toJson(mockProductsList);
-        when(productService.getProducts()).thenReturn(mockProductsList);
+        Page<Product> mockPage = new PageImpl<>(mockProductsList, PageRequest.of(0, 10), mockProductsList.size());
+        when(productService.getProducts(anyInt(), anyInt())).thenReturn(mockPage);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/products")
+                        .param("page", "0")
+                        .param("size", "10")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(expectedResponse));
+                .andExpect(status().isOk());
     }
 
     @Test

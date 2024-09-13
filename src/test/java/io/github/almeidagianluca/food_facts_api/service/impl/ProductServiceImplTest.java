@@ -8,6 +8,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -40,14 +44,14 @@ class ProductServiceImplTest {
 
     @Test
     void getProducts() {
-        List<Product> mockProducstList = getProductsListMock();
+        List<Product> mockProductsList = getProductsListMock();
+        Page<Product> mockPage = new PageImpl<>(mockProductsList, PageRequest.of(0, 10), mockProductsList.size());
+        when(productRepository.findAll(any(Pageable.class))).thenReturn(mockPage);
 
-        when(productRepository.findAll()).thenReturn(mockProducstList);
+        Page<Product> result = productService.getProducts(0, 10);
 
-        List<Product> result = productService.getProducts();
-
-        assertEquals(2, result.size());
-        assertEquals(mockProducstList, result);
+        assertEquals(2, result.getContent().size());
+        assertEquals(mockProductsList, result.getContent());
     }
 
     @Test

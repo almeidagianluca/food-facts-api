@@ -4,10 +4,9 @@ import io.github.almeidagianluca.food_facts_api.controller.ProductController;
 import io.github.almeidagianluca.food_facts_api.model.Product;
 import io.github.almeidagianluca.food_facts_api.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -18,8 +17,9 @@ public class ProductControllerImpl implements ProductController {
 
     @Override
     @GetMapping
-    public List<Product> getProducts() {
-        return productService.getProducts();
+    public Page<Product> getProducts(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "10") int size) {
+        return productService.getProducts(page, size);
     }
 
     @Override
