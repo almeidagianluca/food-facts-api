@@ -4,10 +4,8 @@ import io.github.almeidagianluca.food_facts_api.controller.ProductController;
 import io.github.almeidagianluca.food_facts_api.model.Product;
 import io.github.almeidagianluca.food_facts_api.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +26,11 @@ public class ProductControllerImpl implements ProductController {
     @GetMapping("/{code}")
     public Product getProductByCode(@PathVariable Integer code) {
         return productService.getProductByCode(code);
+    }
+
+    @Override
+    @PutMapping("/{code}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Integer code, @RequestBody Product product) {
+        return productService.updateProduct(code, product);
     }
 }
