@@ -2,6 +2,7 @@ package io.github.almeidagianluca.food_facts_api.service.impl;
 
 import com.mongodb.client.result.UpdateResult;
 import io.github.almeidagianluca.food_facts_api.model.Product;
+import io.github.almeidagianluca.food_facts_api.model.ProductStatus;
 import io.github.almeidagianluca.food_facts_api.repository.ProductRepository;
 import io.github.almeidagianluca.food_facts_api.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,6 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private final String DELETE_STATUS = "trash";
-
     @Autowired
     private ProductRepository productRepository;
 
@@ -35,12 +34,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductByCode(Integer code) {
+    public Product getProductByCode(String code) {
         return productRepository.findByCode(code);
     }
 
     @Override
-    public ResponseEntity<Product> updateProduct(Integer code, Product updatedProduct) {
+    public ResponseEntity<Product> updateProduct(String code, Product updatedProduct) {
         Query query = new Query(Criteria.where("code").is(code));
 
         Update update = new Update()
@@ -67,9 +66,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity<Product> deleteProduct(Integer code) {
+    public ResponseEntity<Product> deleteProduct(String code) {
         Product product = getProductByCode(code);
-        product.setStatus(DELETE_STATUS);
+        product.setStatus(ProductStatus.TRASH);
         return updateProduct(code, product);
     }
 }

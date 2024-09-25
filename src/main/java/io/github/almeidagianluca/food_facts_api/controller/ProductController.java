@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface ProductController {
     Page<Product> getProducts(int page, int size);
-    Product getProductByCode(Integer code);
-    ResponseEntity<Product> updateProduct(Integer code, Product updatedProduct);
-    ResponseEntity<Product> deleteProduct(Integer code);
+    Product getProductByCode(String code);
+    ResponseEntity<Product> updateProduct(String code, Product updatedProduct);
+    ResponseEntity<Product> deleteProduct(String code);
 }

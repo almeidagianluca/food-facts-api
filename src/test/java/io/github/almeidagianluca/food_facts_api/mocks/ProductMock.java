@@ -1,16 +1,18 @@
 package io.github.almeidagianluca.food_facts_api.mocks;
 
 import io.github.almeidagianluca.food_facts_api.model.Product;
+import io.github.almeidagianluca.food_facts_api.model.ProductStatus;
 
+import java.util.Date;
 import java.util.List;
 
 public class ProductMock {
 
     public static List<Product> getProductsListMock() {
         Product product1 = Product.builder()
-                .code(123)
-                .status("Available")
-                .importedT("2024-09-12")
+                .code("123")
+                .status(ProductStatus.PUBLISHED)
+                .importedT(new Date())
                 .url("http://example.com/product")
                 .creator("John Doe")
                 .createdT(1631234567L)
@@ -23,9 +25,9 @@ public class ProductMock {
                 .cities("City Y")
                 .build();
         Product product2 = Product.builder()
-                .code(124)
-                .status("Available")
-                .importedT("2024-09-12")
+                .code("124")
+                .status(ProductStatus.PUBLISHED)
+                .importedT(new Date())
                 .url("http://example.com/product")
                 .creator("John Doe")
                 .createdT(1631234567L)
@@ -42,9 +44,9 @@ public class ProductMock {
 
     public static Product getProductMock() {
         return Product.builder()
-                .code(123)
-                .status("Available")
-                .importedT("2024-09-12")
+                .code("123")
+                .status(ProductStatus.PUBLISHED)
+                .importedT(new Date())
                 .url("http://example.com/product")
                 .creator("John Doe")
                 .createdT(1631234567L)

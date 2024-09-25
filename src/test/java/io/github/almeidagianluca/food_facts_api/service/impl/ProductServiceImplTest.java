@@ -2,6 +2,7 @@ package io.github.almeidagianluca.food_facts_api.service.impl;
 
 import com.mongodb.client.result.UpdateResult;
 import io.github.almeidagianluca.food_facts_api.model.Product;
+import io.github.almeidagianluca.food_facts_api.model.ProductStatus;
 import io.github.almeidagianluca.food_facts_api.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,7 +58,7 @@ class ProductServiceImplTest {
     @Test
     void getProductByCode() {
         Product mockProductList = getProductMock();
-        Integer code = 123;
+        String code = "123";
         when(productRepository.findByCode(code)).thenReturn(mockProductList);
 
         Product result = productService.getProductByCode(code);
@@ -75,7 +76,7 @@ class ProductServiceImplTest {
         when(mongoTemplate.updateFirst(any(Query.class), any(Update.class), eq(Product.class)))
                 .thenReturn(updateResult);
 
-        ResponseEntity<Product> response = productService.updateProduct(123, productMock);
+        ResponseEntity<Product> response = productService.updateProduct("123", productMock);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(productMock, response.getBody());
@@ -91,7 +92,7 @@ class ProductServiceImplTest {
         when(mongoTemplate.updateFirst(any(Query.class), any(Update.class), eq(Product.class)))
                 .thenReturn(updateResult);
 
-        assertThrows(ResponseStatusException.class, () -> productService.updateProduct(123, productMock));
+        assertThrows(ResponseStatusException.class, () -> productService.updateProduct("123", productMock));
     }
 
     @Test
@@ -99,14 +100,14 @@ class ProductServiceImplTest {
         Product productMock = getProductMock();
 
         UpdateResult updateResult = mock(UpdateResult.class);
-        when(productRepository.findByCode(123)).thenReturn(productMock);
+        when(productRepository.findByCode("123")).thenReturn(productMock);
         when(updateResult.getMatchedCount()).thenReturn(1L);
         when(mongoTemplate.updateFirst(any(Query.class), any(Update.class), eq(Product.class)))
                 .thenReturn(updateResult);
 
-        ResponseEntity<Product> response = productService.deleteProduct(123);
+        ResponseEntity<Product> response = productService.deleteProduct("123");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("trash", Objects.requireNonNull(response.getBody()).getStatus());
+        assertEquals(ProductStatus.TRASH, Objects.requireNonNull(response.getBody()).getStatus());
     }
 }

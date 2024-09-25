@@ -24,19 +24,19 @@ public class ProductControllerImpl implements ProductController {
 
     @Override
     @GetMapping("/{code}")
-    public Product getProductByCode(@PathVariable Integer code) {
+    public Product getProductByCode(@PathVariable String code) {
         return productService.getProductByCode(code);
     }
 
     @Override
     @PutMapping("/{code}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Integer code, @RequestBody Product product) {
+    public ResponseEntity<Product> updateProduct(@PathVariable String code, @RequestBody Product product) {
         return productService.updateProduct(code, product);
     }
 
     @Override
     @DeleteMapping("/{code}")
-    public ResponseEntity<Product> deleteProduct(@PathVariable Integer code) {
+    public ResponseEntity<Product> deleteProduct(@PathVariable String code) {
         return productService.deleteProduct(code);
     }
 }

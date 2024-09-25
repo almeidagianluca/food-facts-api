@@ -1,6 +1,6 @@
 package io.github.almeidagianluca.food_facts_api.controller.impl;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.almeidagianluca.food_facts_api.model.Product;
 import io.github.almeidagianluca.food_facts_api.service.ProductService;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,8 @@ class ProductControllerImplTest {
 
     @InjectMocks
     private ProductControllerImpl productController;
-
+    @Autowired
+    private ObjectMapper objectMapper;
     @Autowired
     private MockMvc mockMvc;
     @Test
@@ -52,9 +53,8 @@ class ProductControllerImplTest {
     @Test
     void getProductByCode() throws Exception {
         Product productMock = getProductMock();
-        Integer code = 123;
-        Gson gson = new Gson();
-        String expectedResponse = gson.toJson(productMock);
+        String code = "123";
+        String expectedResponse = objectMapper.writeValueAsString(productMock);
         when(productService.getProductByCode(code)).thenReturn(productMock);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/products/123")
@@ -67,26 +67,23 @@ class ProductControllerImplTest {
     public void updateProduct() throws Exception {
         Product productMock = getProductMock();
 
-        when(productService.updateProduct(123, productMock))
+        when(productService.updateProduct("123", productMock))
                 .thenReturn(new ResponseEntity<>(productMock, HttpStatus.OK));
-
-        Gson gson = new Gson();
-        String expectedResponse = gson.toJson(productMock);
+        String expectedResponse = objectMapper.writeValueAsString(productMock);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/products/123")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(expectedResponse))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(expectedResponse));;
+                .andExpect(MockMvcResultMatchers.content().json(expectedResponse));
     }
 
     @Test
     void deleteProduct() throws Exception {
         Product productMock = getProductMock();
-        Integer code = 123;
-        Gson gson = new Gson();
-        String expectedResponse = gson.toJson(productMock);
+        String code = "123";
+        String expectedResponse = objectMapper.writeValueAsString(productMock);
         when(productService.deleteProduct(code)).thenReturn(new ResponseEntity<>(productMock, HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/products/123")
