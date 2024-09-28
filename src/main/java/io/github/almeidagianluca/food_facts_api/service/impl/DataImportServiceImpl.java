@@ -1,8 +1,10 @@
 package io.github.almeidagianluca.food_facts_api.service.impl;
 
 import com.google.gson.Gson;
+import io.github.almeidagianluca.food_facts_api.model.CronImport;
 import io.github.almeidagianluca.food_facts_api.model.Product;
 import io.github.almeidagianluca.food_facts_api.model.ProductStatus;
+import io.github.almeidagianluca.food_facts_api.repository.CronImportRepository;
 import io.github.almeidagianluca.food_facts_api.repository.ProductRepository;
 import io.github.almeidagianluca.food_facts_api.service.DataImportService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,8 @@ import java.util.zip.GZIPInputStream;
 public class DataImportServiceImpl implements DataImportService {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CronImportRepository cronImportRepository;
     private static final String INDEX_URL = "https://challenges.coode.sh/food/data/json/index.txt";
     private static final String BASE_URL = "https://challenges.coode.sh/food/data/json/";
     @Value("${max.product.import}")
@@ -34,6 +38,7 @@ public class DataImportServiceImpl implements DataImportService {
     @Override
     @Scheduled(cron = "${schedule.cron}")
     public void importData() {
+        String importStatus = "success";
         try {
             List<String> filenames = getFilenames();
             for (String filename : filenames) {
@@ -41,8 +46,10 @@ public class DataImportServiceImpl implements DataImportService {
                 processFile(fileUrl);
             }
         } catch (Exception e) {
+            importStatus = "error";
             log.error("Error importing data: " + e.getMessage());
         }
+        cronImportRepository.save(CronImport.builder().date(new Date()).status(importStatus).build());
     }
 
     protected List<String> getFilenames() throws Exception {

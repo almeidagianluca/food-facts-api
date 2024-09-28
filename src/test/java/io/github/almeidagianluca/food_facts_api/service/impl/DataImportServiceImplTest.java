@@ -1,6 +1,7 @@
 package io.github.almeidagianluca.food_facts_api.service.impl;
 
 import io.github.almeidagianluca.food_facts_api.model.Product;
+import io.github.almeidagianluca.food_facts_api.repository.CronImportRepository;
 import io.github.almeidagianluca.food_facts_api.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +26,9 @@ class DataImportServiceImplTest {
 
     @Mock
     private ProductRepository productRepository;
+
+    @Mock
+    private CronImportRepository cronImportRepository;
 
     @Test
     void importData() throws Exception {
